@@ -1,24 +1,38 @@
 ---
-import { getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 
-// import pcHero from '../../assets/images/pc-hero.png';
-// import tabHero from '../../assets/images/tab-hero.png';
-// import spHero from '../../assets/images/sp-hero.png';
+import hero from "../../assets/images/hero.jpg";
+import hero2 from "../../assets/images/hero02.jpg";
+import hero3 from "../../assets/images/hero03.png";
 
-// const pc = await getImage({ src: pcHero, format: 'webp' });
-// const tab = await getImage({ src: tabHero, format: 'webp' });
-// const sp = await getImage({ src: spHero, format: 'webp' });
+const slides = [hero, hero2, hero3];
+
 ---
 <section class="hero">
-  <!--<picture class="hero-picture">
-    <source media="(max-width: 500px)" srcset={sp.src} />
-    <source media="(max-width: 768px)" srcset={tab.src} />
-    <img
-      src={pc.src}
-      alt=""
-      data-hero-image
-    />
-  </picture> -->
+  <div class="slider">
+    {
+      slides.map((src, i) => (
+        <Image
+          class:list={['hero-img', { 'is-active': i === 0 }]}
+          src={src}
+          alt=""
+          data-slide={i}
+        />
+      ))
+    }
+  </div>
+  <div class="indicators">
+    {
+      slides.map((_, i) => (
+        <button
+          type="button"
+          class:list={['indicator', { 'is-active': i === 0 }]}
+          aria-label={`${i + 1}枚目`}
+          data-index={i}
+        />
+      ))
+    }
+  </div>
 </section>
 
 <style lang="scss">
@@ -28,12 +42,53 @@ import { getImage } from 'astro:assets';
 
   // ――――――――――――――――――――――――――――――――――― hero
   .hero {
-
+    position: relative;
   }
   // ――――――――――――――――――――――――――――――――――― hero-picture
-  .hero-picture {
-
+  .slider {
+    position: relative;
+    height: 100dvh;
   }
+  // ―――――――――――――――――――――――――――――――――――
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    object-fit: cover;
+    transition: opacity 1.2s ease;
+    pointer-events: none;
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+
+  .indicators {
+    position: absolute;
+    display: flex;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 12px;
+    z-index: 1;
+  }
+
+  .indicator {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    &.is-active {
+      background: #fff;
+    }
+  }
+
+
 
   //―――――――――――――――――――――――――――――――――――――― ブレークポイント / タブレット
   @include tb {
@@ -45,3 +100,30 @@ import { getImage } from 'astro:assets';
 
   }
 </style>
+
+<script>
+  const hero = document.querySelector('.hero');
+  if (!hero) throw new Error();
+  const slides = hero.querySelectorAll<HTMLElement>('.hero-img');
+  const indicators = hero.querySelectorAll<HTMLButtonElement>('.indicator');
+  let current = 0;
+  let timer: ReturnType<typeof setInterval>;
+  const goTo = (index: number) => {
+    slides[current]?.classList.remove('is-active');
+    indicators[current]?.classList.remove('is-active');
+    current = index;
+    slides[current]?.classList.add('is-active');
+    indicators[current]?.classList.add('is-active');
+  };
+  const start = () => {
+    timer = setInterval(() => goTo((current + 1) % slides.length), 5000);
+  };
+  indicators.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      clearInterval(timer);
+      goTo(i);
+      start();
+    });
+  });
+  start();
+</script>

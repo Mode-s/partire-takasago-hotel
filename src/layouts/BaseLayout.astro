@@ -6,6 +6,7 @@ import { siteConfig } from '../config/site';
 
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
+import Reserve from '../components/common/Reserve.astro';
 
 const {
   title = siteConfig.title,
@@ -37,7 +38,31 @@ const {
     <meta name="twitter:title" content={title}/>
     <meta name="twitter:description" content={description} />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+
     <script src="../scripts/animation.ts"></script>
+    <script>
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      let lastY = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        // ヘッダー：下スクロールで隠す / 上スクロールで表示
+        if (y > lastY && y > 100) {
+          document.body.classList.add('hide-header');
+        } else if (y < lastY) {
+          document.body.classList.remove('hide-header');
+        }
+        lastY = y;
+        // Reserve：スクロール中は隠す（停止で復帰）
+        document.body.classList.add('is-scrolling');
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          document.body.classList.remove('is-scrolling');
+        }, 200);
+      }, { passive: true });
+    </script>
 	</head>
 	<body>
 		<Header />
@@ -45,5 +70,7 @@ const {
       <slot />
     </main>
     <Footer />
+    <Reserve />
 	</body>
 </html>
+

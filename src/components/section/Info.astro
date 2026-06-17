@@ -23,22 +23,16 @@ const { shop } = siteConfig;
           </dd>
         </>
       )}
-      {shop.hours   && (
+      {shop.checkin   && (
         <>
-          <dt class="info-label">営業時間</dt>
-          <dd class="info-data">{shop.hours}</dd>
+          <dt class="info-label">チェックイン</dt>
+          <dd class="info-data">{shop.checkin}</dd>
         </>
       )}
-      {shop.closed  && (
+      {shop.checkout  && (
         <>
-          <dt class="info-label">定休日</dt>
-          <dd class="info-data">{shop.closed}</dd>
-        </>
-      )}
-      {shop.seats   && (
-        <>
-          <dt class="info-label">席数</dt>
-          <dd class="info-data">{shop.seats}</dd>
+          <dt class="info-label">チェックアウト</dt>
+          <dd class="info-data">{shop.checkout}</dd>
         </>
       )}
       {shop.parking && (

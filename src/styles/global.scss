@@ -6,9 +6,15 @@ html {
   scroll-behavior: smooth;
   overflow-x: clip;
 }
+
+html.is-locked {
+  overflow: hidden;
+}
 // ――――――――――――――――――――――――― 
 body {
+  font-family: "Merriweather", serif;
   min-height: 100vh;
+  background-color: $bg-base;
   font-size: 1rem;
   line-height: 1.7;
   color: $color-base;
@@ -44,7 +50,7 @@ button {
 }
 // ――――――――――――――――――――――――― 
 .section-title {
-
+  font-size: clamp(1.5rem, 5vw, 3rem);
 }
 // ――――――――――――――――――――――――― 
 .title {

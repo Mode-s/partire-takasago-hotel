@@ -5,10 +5,10 @@ import { siteConfig } from './site';
 import logoImg from '../assets/images/logo.png';
 
 //　メニュー / プランイメージ画像
-import item01 from '../assets/images/logo.png';
-import item02 from '../assets/images/logo.png';
-import item03 from '../assets/images/logo.png';
-import item04 from '../assets/images/logo.png';
+import item01 from '../assets/images/101/101.jpg';
+import item02 from '../assets/images/102/102.jpg';
+import item03 from '../assets/images/201/201.jpg';
+import item04 from '../assets/images/202/202.jpg';
 import item05 from '../assets/images/logo.png';
 
 type Logo = { src: ImageMetadata; alt: string; href: string };
@@ -23,22 +23,21 @@ export const content = {
       href: "/",
     } satisfies Logo,
     nav: [
-      { label: "about",   href: "#" },
-      { label: "menu",    href: "#" },
-      { label: "info",    href: "#" },
-      { label: "access",  href: "#" },
-      { label: "contact", href: "#" },
+      { label: "Price",   href: "#price" },
+      { label: "Rooms",    href: "#rooms" },
+      { label: "Info",    href: "#info" },
+      { label: "Access",  href: "#access" },
+      { label: "Contact", href: "#contact" },
     ] satisfies NavItem[],
   },
   //　メニュー
   menu: {
-    title: "",
+    title: "Rooms",
     items: [
-      { image: item01, name: "商品A", price: "10", description: "あ" },
-      { image: item02, name: "商品B", price: "20", description: "い" },
-      { image: item03, name: "商品C", price: "30", description: "う" },
-      { image: item04, name: "商品D", price: "40", description: "え" },
-      { image: item05, name: "商品E", price: "50", description: "お" },
+      { image: item01, name: "101号室", price: "10", description: "あ" },
+      { image: item02, name: "102号室", price: "20", description: "い" },
+      { image: item03, name: "201号室", price: "30", description: "う" },
+      { image: item04, name: "202号室", price: "40", description: "え" },
     ] satisfies Item[],
   },
 } as const;

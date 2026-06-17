@@ -6,24 +6,30 @@ import { content } from '../../config/content';
 const { logo, nav } = content.header;
 ---
 <header class="header">
-  <div class="inner header-inner">
-    <h1 class="header-logo">
-      <a class="logo-link" href={logo.href}>
-        <Image class="logo-img" src={logo.src} alt={logo.alt} />
-      </a>
-    </h1>
-    <nav class="nav">
-      <ul class="nav-list">
-        {nav.map((item) => (
-          <li class="nav-item">
-            <a class="nav-link" href={item.href}>
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+  <div class="header-bar">
+    <div class="inner header-inner">
+      <h1 class="header-logo">
+        <a class="logo-link" href={logo.href}>
+          <Image class="logo-img" src={logo.src} alt={logo.alt} />
+        </a>
+      </h1>
+      <button class="menu-btn" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="global-nav">
+        <span class="menu-btn-line"></span>
+        <span class="menu-btn-line"></span>
+      </button>
+    </div>
   </div>
+  <nav class="nav">
+    <ul class="nav-list">
+      {nav.map((item) => (
+        <li class="nav-item">
+          <a class="nav-link" href={item.href}>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
 </header>
 
 <style lang="scss">
@@ -32,11 +38,103 @@ const { logo, nav } = content.header;
 
   // ―――――――――――――――――――――――――――――――――――
   .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .header-bar {
+    position: relative;
+    z-index: 101;
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+  }
+
+  body.hide-header .header-bar {
+    transform: translateY(-100%);
+  }
+
+  .header.is-open .header-bar {
+    transform: none; /* メニュー中はバー表示 */
+  }
+
+  // ―――――――――――――――――――――――――――――――――――
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 8px;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .header-logo {
 
   }
   // ―――――――――――――――――――――――――――――――――――
-  .header-inner {
+  .logo-img {
+    max-width: 200px;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 70px;
+    height: 44px;
+    padding: 0;
+    z-index: 100;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .menu-btn-line {
+    display: block;
+    width: 70px;
+    height: 2px;
+    margin: 0 auto;
+    background: $color-base;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .header.is-open .menu-btn-line:nth-child(1) {
+    transform: translateY(4px) rotate(20deg);
+  }
 
+  .header.is-open .menu-btn-line:nth-child(2) {
+    transform: translateY(-4px) rotate(-20deg);
+  } 
+  // ―――――――――――――――――――――――――――――――――――
+  .nav {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    background: rgba(255, 255, 255, 0.95);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .header.is-open .nav {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
   }
   //―――――――――――――――――――――――――――――――――――――― タブレット
   @include tb {
@@ -48,3 +146,29 @@ const { logo, nav } = content.header;
 
   }
 </style>
+
+<script>
+  const header = document.querySelector('.header');
+  const btn = header?.querySelector('.menu-btn');
+  const nav = header?.querySelector('.nav');
+  const links = header?.querySelectorAll('.nav-link');
+  const close = () => {
+    header?.classList.remove('is-open');
+    btn?.setAttribute('aria-expanded', 'false');
+    btn?.setAttribute('aria-label', 'メニューを開く');
+    nav?.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('is-locked');
+  };
+  const open = () => {
+    header?.classList.add('is-open');
+    btn?.setAttribute('aria-expanded', 'true');
+    btn?.setAttribute('aria-label', 'メニューを閉じる');
+    nav?.setAttribute('aria-hidden', 'false');
+    document.body.classList.remove('hide-header');
+    document.documentElement.classList.add('is-locked');
+  };
+  btn?.addEventListener('click', () => {
+    header?.classList.contains('is-open') ? close() : open();
+  });
+  links?.forEach((link) => link.addEventListener('click', close));
+</script>

@@ -2,13 +2,11 @@
 import { Icon } from 'astro-icon/components';
 import { siteConfig } from '../../config/site';
 
-const { shop, sns } = siteConfig;
+const { site, room, shop } = siteConfig;
 
-const snsLinks = [
-  { label: "X",         href: sns.x,         icon: "simple-icons:x" },
-  { label: "Instagram", href: sns.instagram, icon: "simple-icons:instagram" },
-  { label: "LINE",      href: sns.line,      icon: "simple-icons:line" },
-  { label: "Facebook",  href: sns.facebook,  icon: "simple-icons:facebook" },
+const Links = [
+  { label: "airbnb",         href: site.airbnb,         icon: "simple-icons:airbnb" },
+  { label: "Booking.com",         href: site.booking,         icon: "simple-icons:bookingdotcom" },
 ].filter(( item ) => item.href );
 ---
 <section class="section contact" id="contact">
@@ -20,16 +18,16 @@ const snsLinks = [
       { shop.tel.display && (
         <a class="tel" href={`tel:${ shop.tel.link }`}>
           <Icon class="contact-tel-icon" name="mdi:phone" />
-          { shop.tel.display }
+          <p class="label">{ shop.tel.display }</p>
         </a>
       )}
-      { snsLinks.length > 0 && (
+      { Links.length > 0 && (
         <ul class="sns-list">
-          { snsLinks.map(( item ) => (
+          { Links.map(( item ) => (
             <li class="sns-item">
               <a class="sns-link" href={ item.href } target="_blank" rel="noopener noreferrer">
                 <Icon class="sns-icon" name={item.icon} />
-                {item.label}
+                <p class="label">{item.label}</p>
               </a>
             </li>
           ))}
@@ -44,8 +42,31 @@ const snsLinks = [
   @use "../../styles/mixins" as *;
 
   // ―――――――――――――――――――――――――――――――――――
-  .section {
+  .actions {
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    margin: 0 auto;
+  }
 
+  .tel {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+
+  // ―――――――――――――――――――――――――――――――――――
+  .tel,
+  .sns-item {
+    padding: 10px;
+  }
+
+  // ―――――――――――――――――――――――――――――――――――
+  .sns-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
   //―――――――――――――――――――――――――――――――――――――― ブレークポイント / タブレット

@@ -1,0 +1,93 @@
+---
+import { siteConfig } from '../../config/site';
+
+const { site } = siteConfig;
+---
+
+<div class="reserve">
+  <button class="reserve-toggle" type="button" aria-expanded="false" aria-controls="reserve-panel">予約する</button>
+  <div class="reserve-panel" id="reserve-panel" aria-hidden="true">
+    <a href={site.airbnb} class="reserve-link airbnb" target="_blank" rel="noopener noreferrer">airbnbで予約する</a>
+    <a href={site.booking} class="reserve-link booking" target="_blank" rel="noopener noreferrer">Booking.comで予約する</a>
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../../styles/variables' as *;
+  @use '../../styles/mixins' as *;
+
+  .reserve {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    z-index: 90;
+    display: flex;
+    align-items: stretch;
+    transform: translateY(-50%);
+    overflow: hidden;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  body.is-scrolling .reserve {
+    transform: translateY(-50%) translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .reserve-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    writing-mode: vertical-rl;
+    padding: 0 8px;
+    background: $color-base;
+    border-radius: 8px 0 0 8px;
+    color: #fff;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+  }
+
+  .reserve-panel {
+    display: flex;
+    flex-direction: column;
+    width: 0;
+    min-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: width 0.3s ease, opacity 0.3s ease, padding-left 0.3s ease;
+  }
+
+  .reserve.is-open .reserve-panel {
+    width: 200px;
+    opacity: 1;
+  }
+
+  .reserve-link {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex: 1;
+    padding: 14px 16px;
+    color: #fff;
+    white-space: nowrap;
+    
+    &.airbnb {
+      background: #ff5a5f;
+    }
+    &.booking {
+      background: #003580;
+    }
+  }
+</style>
+
+<script>
+  const reserve = document.querySelector('.reserve');
+  const toggle = reserve?.querySelector('.reserve-toggle');
+  const panel = reserve?.querySelector('.reserve-panel');
+  toggle?.addEventListener('click', () => {
+    const isOpen = reserve?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    panel?.setAttribute('aria-hidden', String(!isOpen));
+  });
+</script>

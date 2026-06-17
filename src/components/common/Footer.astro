@@ -12,10 +12,10 @@ const { logo } = content.header;
     <a class="logo-link" href={logo.href}>
       <Image class="logo-img" src={logo.src} alt={logo.alt} />
     </a>
-    <small class="copyright">
-      &copy; 2026 {siteConfig.name} 
-    </small>
   </div>
+  <small class="copyright">
+    &copy; 2026 {siteConfig.name} 
+  </small>
 </footer>
 
 <style lang="scss">
@@ -23,6 +23,16 @@ const { logo } = content.header;
   @use "../../styles/mixins" as *;
 
   // ―――――――――――――――――――――――――――――――――――
+  .copyright {
+    display: flex;
+    justify-content: center;
+    max-width: 90%;
+    border-top: 1px solid #919191;
+    margin: 0 auto;
+    padding: 10px;
+    font-size: 0.5rem;
+    color: #a1a0a0;
+  }
 
   //―――――――――――――――――――――――――――――――――――――― タブレット
   @include tb {
