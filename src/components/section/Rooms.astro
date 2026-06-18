@@ -1,28 +1,89 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import { content } from '../../config/content';
 
-const { title, items } = content.menu;
+const { title, items } = content.rooms;
 ---
 <section class="section rooms" id="rooms">
   <div class="inner menu-inner">
     <header class="section-title">
       <h2 class="title">{ title }</h2>
     </header>
+    <ul class="pills">
+      {items.map((item) => (
+        <li class="pill-item">
+          <a href={`#room-${item.id}`} class="pill-link">{item.id}</a>
+        </li>
+      ))}
+    </ul>
     <ul class="list">
       {items.map((item) => (
-        <li class="item">
-          <div class="img-wrap">
-            <Image class="image" src={ item.image } alt={ item.name } />
-          </div>
+        <li class="item" id={`room-${item.id}`}>
+          <button class="media" type="button" data-modal-open={item.id} aria-label={`${item.name}の室内を見る`}>
+            <div class="slider" data-slider={`card-${item.id}`}>
+              {item.images.map((src, i) => (
+                <Image class:list={['media-img' , { 'is-active': i === 0 }]} src={ src } alt={item.name} data-slide={i} />
+              ))}
+            </div>
+            <span class="badge">
+              <Icon name="mdi:image-multiple-outline" />
+              {item.images.length}
+            </span>
+            <span class="overlay">
+              <Icon class="overlay-icon" name="mdi:magnify-plus-outline" />
+              <span class="overlay-text">View room</span>
+            </span>
+          </button>
           <div class="body">
-            <h3 class="name">{ item.name }</h3>
-            {item.price && <p class="price">{ item. price }</p>}
-            {item.description && <p class="description">{ item.description }</p>}
+            <h3 class="name">{item.name}</h3>
+            <div class="reserve-links">
+              <a class="reserve-link airbnb" href={item.airbnb} target="_blank" rel="noopener noreferrer">
+                <Icon name="simple-icons:airbnb" /> airbnb
+              </a>
+              <a class="reserve-link booking" href={item.booking} target="_blank" rel="noopener noreferrer">
+                <Icon name="simple-icons:bookingdotcom" /> Booking.com
+              </a>
+            </div>
           </div>
         </li>
       ))}
     </ul>
+  </div>
+  <div class="modal" data-modal aria-hidden="true">
+    <div class="modal-backdrop" data-modal-close></div>
+    {items.map((item) => (
+      <div class="modal-panel" data-modal-panel={item.id} hidden>
+        <button class="modal-close" type="button" data-modal-close aria-label="閉じる">
+          <Icon name="mdi:close" />
+        </button>
+        <div class="modal-slider" data-slider={`modal-${item.id}`}>
+          {item.images.map((src, i) => (
+            <Image class:list={['modal-img', { 'is-active': i === 0 }]} src={src} alt={item.name} data-slide={i} />
+          ))}
+          {item.images.length > 1 && (
+            <>
+              <button class="modal-nav prev" type="button" data-slider-prev aria-label="前の写真"><Icon name="mdi:chevron-left" /></button>
+              <button class="modal-nav next" type="button" data-slider-next aria-label="次の写真"><Icon name="mdi:chevron-right" /></button>
+              <div class="modal-dots">
+                {item.images.map((_, i) => (
+                  <button class:list={['modal-dot', { 'is-active': i === 0 }]} type="button" data-slider-dot={i} aria-label={`${i + 1}枚目`}></button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        <p class="modal-name">{item.name}</p>
+        <div class="reserve-links">
+          <a class="reserve-link airbnb" href={item.airbnb} target="_blank" rel="noopener noreferrer">
+            <Icon name="simple-icons:airbnb" /> airbnb
+          </a>
+          <a class="reserve-link booking" href={item.booking} target="_blank" rel="noopener noreferrer">
+            <Icon name="simple-icons:bookingdotcom" /> Booking.com
+          </a>
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -30,18 +91,346 @@ const { title, items } = content.menu;
   @use "../../styles/variables" as *;
   @use "../../styles/mixins" as *;
 
-  // ―――――――――――――――――――――――――――――――――――
-  .section {
-
+  .rooms-inner {
+    max-width: 720px;
   }
 
-  //―――――――――――――――――――――――――――――――――――――― ブレークポイント / タブレット
-  @include tb {
-
+  .title {
+    text-align: center;
   }
 
-  //―――――――――――――――――――――――――――――――――――――― ブレークポイント / スマホ
+  // ピルタグ
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .pill-link {
+    padding: 6px 20px;
+    border: 1px solid rgba($color-base, 0.3);
+    border-radius: 999px;
+    font-size: $fs-sm;
+    letter-spacing: 0.1em;
+    transition: background 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background: $color-base;
+      color: #fff;
+    }
+  }
+
+  // カードリスト
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    margin-top: 48px;
+  }
+
+  .item {
+    scroll-margin-top: 80px;
+  }
+
+  // メディア(画像エリア)
+  .media {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    background: transparent;
+    cursor: zoom-in;
+  }
+
+  .slider,
+  .media-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .media-img {
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.4s ease;
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+
+  .media:hover .media-img.is-active {
+    transform: scale(1.05);
+  }
+
+  // バッジ(枚数)
+  .badge {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 999px;
+    color: #fff;
+    font-size: $fs-xs;
+    pointer-events: none;
+  }
+
+  // ホバーオーバーレイ
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .media:hover .overlay {
+    opacity: 1;
+  }
+
+  .overlay-icon {
+    font-size: 32px;
+  }
+
+  .overlay-text {
+    font-size: $fs-xs;
+    letter-spacing: 0.1em;
+  }
+
+  // 号室情報
+  .body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .name {
+    font-size: $fs-lg;
+    letter-spacing: 0.15em;
+  }
+
+  // 予約ボタン
+  .reserve-links {
+    display: flex;
+    gap: 8px;
+  }
+
+  .reserve-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: $fs-sm;
+    @include hover-opacity;
+
+    &.airbnb {
+      background: #ff5a5f;
+    }
+    &.booking {
+      background: #003580;
+    }
+  }
+
+  // モーダル
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal.is-open {
+    display: flex;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .modal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    padding: 32px 40px 24px;
+    background: $bg-base;
+    border-radius: 4px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+  }
+
+  .modal-slider {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .modal-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+
+  .modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+
+    &.prev { left: 8px; }
+    &.next { right: 8px; }
+  }
+
+  .modal-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+
+  .modal-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+
+    &.is-active {
+      background: #fff;
+    }
+  }
+
+  .modal-name {
+    margin: 20px 0;
+    font-size: $fs-lg;
+    letter-spacing: 0.15em;
+    text-align: center;
+  }
+
+  .modal-panel .reserve-links {
+    justify-content: center;
+  }
+
   @include sp {
-
+    .body {
+      justify-content: center;
+    }
   }
 </style>
+
+<script>
+  // モーダル開閉
+  const modal = document.querySelector<HTMLElement>('[data-modal]');
+  const panels = document.querySelectorAll<HTMLElement>('[data-modal-panel]');
+  const openButtons = document.querySelectorAll<HTMLElement>('[data-modal-open]');
+  const closeButtons = document.querySelectorAll<HTMLElement>('[data-modal-close]');
+
+  const closeModal = () => {
+    modal?.classList.remove('is-open');
+    modal?.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('is-locked');
+    panels.forEach((p) => (p.hidden = true));
+  };
+
+  const openModal = (id: string) => {
+    panels.forEach((p) => (p.hidden = p.dataset.modalPanel !== id));
+    modal?.classList.add('is-open');
+    modal?.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('is-locked');
+  };
+
+  openButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.modalOpen;
+      if (id) openModal(id);
+    });
+  });
+
+  closeButtons.forEach((btn) => btn.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // スライダー(カード内・モーダル内 共通)
+  document.querySelectorAll<HTMLElement>('[data-slider]').forEach((slider) => {
+    const slides = slider.querySelectorAll<HTMLElement>('[data-slide]');
+    const dots = slider.querySelectorAll<HTMLElement>('[data-slider-dot]');
+    const prev = slider.querySelector<HTMLElement>('[data-slider-prev]');
+    const next = slider.querySelector<HTMLElement>('[data-slider-next]');
+    if (slides.length < 2) return;
+
+    let current = 0;
+    const goTo = (i: number) => {
+      const idx = (i + slides.length) % slides.length;
+      slides[current]?.classList.remove('is-active');
+      dots[current]?.classList.remove('is-active');
+      current = idx;
+      slides[current]?.classList.add('is-active');
+      dots[current]?.classList.add('is-active');
+    };
+
+    prev?.addEventListener('click', () => goTo(current - 1));
+    next?.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+  });
+</script>
