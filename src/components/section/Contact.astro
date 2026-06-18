@@ -15,23 +15,23 @@ const Links = [
       <h2 class="title">Contact</h2>
     </header>
     <div class="actions">
-      { shop.tel.display && (
-        <a class="tel" href={`tel:${ shop.tel.link }`}>
-          <Icon class="contact-tel-icon" name="mdi:phone" />
-          <p class="label">{ shop.tel.display }</p>
-        </a>
-      )}
       { Links.length > 0 && (
         <ul class="sns-list">
           { Links.map(( item ) => (
             <li class="sns-item">
-              <a class="sns-link" href={ item.href } target="_blank" rel="noopener noreferrer">
+              <a class:list={['sns-link', item.label.toLowerCase().includes('airbnb') ? 'airbnb' : 'booking']} href={ item.href } target="_blank" rel="noopener noreferrer">
                 <Icon class="sns-icon" name={item.icon} />
                 <p class="label">{item.label}</p>
               </a>
             </li>
           ))}
         </ul>
+      )}
+      { shop.tel.display && (
+        <a class="tel" href={`tel:${ shop.tel.link }`}>
+          <Icon class="contact-tel-icon" name="mdi:phone" />
+          <p class="label">{ shop.tel.display }</p>
+        </a>
       )}
     </div>
   </div>
@@ -42,40 +42,62 @@ const Links = [
   @use "../../styles/mixins" as *;
 
   // ―――――――――――――――――――――――――――――――――――
+  .contact-inner {
+  max-width: 560px;
+}
+.title {
+  text-align: center;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 40px;
+}
+.tel,
+.sns-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: #fff;
+  border: 1px solid rgba($color-base, 0.12);
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    opacity: 0.85;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+}
+.contact-tel-icon,
+.sns-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+}
+.label {
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.tel {
+  font-size: $fs-lg;
+}
+.sns-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@include sp {
   .actions {
-    display: flex;
-    flex-direction: column;
-    max-width: 700px;
-    margin: 0 auto;
+    margin-top: 32px;
+    gap: 12px;
   }
-
-  .tel {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-
-  // ―――――――――――――――――――――――――――――――――――
   .tel,
-  .sns-item {
-    padding: 10px;
-  }
-
-  // ―――――――――――――――――――――――――――――――――――
   .sns-link {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    padding: 16px 20px;
   }
-
-  //―――――――――――――――――――――――――――――――――――――― ブレークポイント / タブレット
-  @include tb {
-
+  .tel {
+    font-size: $fs-base;
   }
-
-  //―――――――――――――――――――――――――――――――――――――― ブレークポイント / スマホ
-  @include sp {
-
-  }
+}
 </style>

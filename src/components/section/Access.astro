@@ -20,19 +20,58 @@ const { shop, name } = siteConfig;
 <style lang="scss">
   @use "../../styles/variables" as *;
   @use "../../styles/mixins" as *;
-
-  // ―――――――――――――――――――――――――――――――――――
-  .section {
-
+  
+  .access-inner {
+    max-width: 800px;
   }
 
-  //―――――――――――――――――――――――――――――――――――――― ブレークポイント / タブレット
-  @include tb {
-
+  .title {
+    text-align: center;
   }
 
-  //―――――――――――――――――――――――――――――――――――――― ブレークポイント / スマホ
+  .address {
+    margin-top: 40px;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.8;
+  }
+
+  .access-text {
+    margin-top: 16px;
+    text-align: center;
+    font-size: $fs-sm;
+    color: rgba($color-base, 0.7);
+    line-height: 1.8;
+  }
+
+  .access-map {
+    margin-top: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .map {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+  }
+
   @include sp {
+    .address {
+      margin-top: 32px;
+      font-size: $fs-sm;
+    }
 
+    .access-map {
+      margin-top: 24px;
+      border-radius: 4px;
+    }
+
+    .map {
+      aspect-ratio: 4 / 3;
+    }
   }
 </style>
