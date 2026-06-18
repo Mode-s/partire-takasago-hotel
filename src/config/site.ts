@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Partire Takasago Hotel", //　企業名、店舗名
   title: "Partire Takasago Hotel",
-  description: "ディスクリプション文",
+  description: "福岡・天神エリア徒歩圏内。Partire Takasago Hotelは高砂に4室の宿泊スペース。グループ旅行や家族旅行に。101〜202号室、最大5名まで。",
   url: "https://example.com",      // 本番URL（OGPの絶対パス生成にも使う）
   ogImage: "/ogp.png",
   lang: "ja",
