@@ -60,6 +60,12 @@ const { site } = siteConfig;
     border-radius: 8px 0 0 8px;
     letter-spacing: 0.15em;
     white-space: nowrap;
+    transition: padding-right 0.3s ease, background 0.3s ease;
+
+    &:hover {
+      padding-right: 14px;
+      background: rgba($color-base, 0.85);
+    }
   }
 
   /* モーダル */
@@ -102,6 +108,12 @@ const { site } = siteConfig;
     font-size: 1.5rem;
     line-height: 1;
     color: $color-base;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.6;
+      transform: rotate(90deg);
+    }
   }
 
   .reserve-title {

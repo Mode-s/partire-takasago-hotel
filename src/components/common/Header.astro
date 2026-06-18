@@ -75,6 +75,9 @@ const { logo, nav } = content.header;
 
   }
   // ―――――――――――――――――――――――――――――――――――
+  .logo-link {
+    @include hover-opacity;
+  }
   .logo-img {
     max-width: 200px;
   }
@@ -135,6 +138,11 @@ const { logo, nav } = content.header;
     gap: 32px;
     font-weight: 500;
     letter-spacing: 0.09em;
+  }
+  // ―――――――――――――――――――――――――――――――――――
+  .nav-link {
+    display: inline-block;
+    @include hover-underline;
   }
   //―――――――――――――――――――――――――――――――――――――― タブレット
   @include tb {

@@ -23,6 +23,10 @@ const { logo } = content.header;
   @use "../../styles/mixins" as *;
 
   // ―――――――――――――――――――――――――――――――――――
+  .logo-link {
+    @include hover-opacity;
+  }
+  // ―――――――――――――――――――――――――――――――――――
   .copyright {
     display: flex;
     justify-content: center;
