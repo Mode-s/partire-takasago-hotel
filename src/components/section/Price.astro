@@ -5,6 +5,31 @@
     <header class="section-title">
       <h2 class="title">Price</h2>
     </header>
+    <section class="price-block">
+      <h3 class="price-block-title">宿泊料金</h3>
+      <dl class="price-list">
+        <dt class="price-label">平日</dt>
+        <dd class="price-data">￥14,000～</dd>
+        <dt class="price-label">週末</dt>
+        <dd class="price-data">￥21,000～</dd>
+      </dl>
+      <ul class="price-notes">
+        <li class="price-note-item">3名まで料金に含む</li>
+        <li class="price-note-item">4名以上は1名追加ごとに￥3,000/泊</li>
+        <li class="price-note-item">最大5名宿泊可能</li>
+        <li class="price-note-item">清掃費￥5,000（1予約ごと）</li>
+      </ul>
+    </section>
+    <section class="price-block">
+      <h3 class="price-block-title">荷物預かり・アーリーチェックイン</h3>
+      <dl class="price-list">
+        <dt class="price-label">チェックイン前（13:00以降）</dt>
+        <dd class="price-data">1時間￥1,000</dd>
+        <dt class="price-label">チェックアウト後（12:00まで）</dt>
+        <dd class="price-data">1時間￥1,000</dd>
+      </dl>
+      <p class="price-note">※事前予約制</p>
+    </section>
   </div>
 </section>
 
@@ -13,8 +38,78 @@
   @use "../../styles/mixins" as *;
 
   // ――――――――――――――――――――――――――――――――――――――――
-  .section {
+  .price-inner {
+    max-width: 500px;
+  }
 
+  // ――――――――――――――――――――――――――――――――――――――――
+  .title {
+    text-align: center;
+  }
+
+  // ――――――――――――――――――――――――――――――――――――――――
+  .price-block + .price-block {
+    margin-top: 40px;
+
+    &::before {
+      content: "🔹🔹🔹";
+      display: block;
+      text-align: center;
+      margin-bottom: 24px;
+      letter-spacing: 0.4em;
+      color: rgba($color-base, 0.4);
+    }
+  }
+
+  // ――――――――――――――――――――――――――――――――――――――――
+  .price-block-title {
+    text-align: center;
+    color: rgba($color-base, 0.8);
+  }
+
+  .price-list {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-top: 40px;
+  }
+
+  .price-label,
+  .price-data {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba($color-base, 0.15);
+  }
+
+  .price-data {
+    font-weight: 500;
+  }
+
+  .price-notes {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    max-width: 300px;
+    margin: 16px auto 0;
+  }
+
+  .price-note {
+    text-align: center;
+  }
+
+  .price-note-item {
+    padding: 8px 16px 8px 32px;
+    font-size: $fs-xs;
+    color: rgba($color-base, 0.6);
+
+    &::before {
+      content: "・";
+      margin: 0 4px;
+    }
+  }
+
+  .price-note {
+    margin-top: 18px;
+    text-align: center;
+    color: rgba($color-base, 0.6);
   }
 
   //―――――――――――――――――――――――――――――――――――――― ブレークポイント / タブレット

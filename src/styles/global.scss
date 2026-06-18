@@ -15,7 +15,7 @@ body {
   font-family: "Merriweather", serif;
   min-height: 100vh;
   background-color: $bg-base;
-  font-size: 1rem;
+  font-size: $fs-base;
   line-height: 1.7;
   color: $color-base;
   overflow-x: clip;

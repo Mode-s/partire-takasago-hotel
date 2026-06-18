@@ -115,7 +115,7 @@ const { logo, nav } = content.header;
     align-items: center;
     justify-content: center;
     z-index: 99;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease;
@@ -124,7 +124,7 @@ const { logo, nav } = content.header;
   .header.is-open .nav {
     opacity: 1;
     visibility: visible;
-    pointer-events: none;
+    pointer-events: auto;
     transition: opacity 0.3s ease;
   }
   // ―――――――――――――――――――――――――――――――――――
